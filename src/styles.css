@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+.ctrl-space {
+    margin-right: 5px;
+}
+
+.empty-line {
+    height: 15px;
+}
+
+.thumbnail img {
+  width:100px;
+  height:100px;
+  min-height:100px;
+  margin-bottom: 0px;
+}
+
+.upload-btn {
+  margin-left: 45px;
+}
+
+.no-bottom-margin {
+  margin-bottom: 0px;
+}
+
+.hr-line {
+    margin-left: 15px;
+    margin-right: 15px;
+}

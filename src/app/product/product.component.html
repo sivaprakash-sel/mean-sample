@@ -1,0 +1,149 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-11">
+      <input class="form-control input-block" id="productQuery" type="text" [(ngModel)]="productQuery" (keyup)="searchProducts()" />
+    </div>
+    <div class="col-md-1" >
+      <button type="button" class="btn btn-primary btn-block" (click)="searchProducts()">
+        <span class="glyphicon glyphicon-search"></span>
+      </button>
+    </div>
+    <div class="col-xs-12 empty-line" ></div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default" droppable (onDrop)="onItemDrop($event)">
+        <div class="panel-heading "><label class="glyphicon glyphicon-filter" >Category</label></div>
+        <div class="panel-body">
+          <button type="button" class="btn btn-xs btn-success ctrl-space" *ngFor="let item of droppedItems" >
+            <label class="no-bottom-margin">{{item}}</label>
+            <button type="button" class="btn btn-xs btn-danger glyphicon glyphicon-remove-sign" (click)="removeItem(item)">
+            </button>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <button type="button" class="btn btn-xs btn-success ctrl-space" draggable *ngFor="let item of items" [dragData]="item" >
+        <label class="no-bottom-margin">{{item}}</label>
+      </button>
+    </div>
+    <div class="col-xs-12 empty-line" ></div>
+  </div>
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">Product List</div>
+        <div class="panel-body">
+          <div class="row" *ngFor="let product of products">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="fileupload fileupload-exists" data-provides="fileupload" data-name="myimage">
+                  <input type="hidden" name="myimage" value="1" />
+                  <div class="fileupload-new thumbnail no-bottom-margin" >
+                    <img id="img-{{product._id}}" src="{{ product.imageUrl == null ? '/assets/default-image.png' : product.imageUrl }}" />
+                    <span class="btn btn-link btn-xs upload-btn">
+                      <input id="imgUpl-{{product._id}}" type="file" (change)="readURL(product._id)" class="hidden"/>
+                      <label class="no-bottom-margin" for="imgUpl-{{product._id}}">Browse</label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-9">
+                {{ product.title }} <br />
+                {{ product.category }} <br />
+                {{ product.price}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 upload-btn">
+                <button type="button" class="btn btn-xs btn-success" (click)="uploadFile(product._id)">
+                  <span class="glyphicon glyphicon-open"></span>
+                </button>
+                <button type="button" class="btn btn-xs btn-danger" >
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </div>
+              <div class="col-md-4"> </div>
+              <div class="col-md-4">
+                <button type="button" class="btn btn-xs btn-primary" (click)="selectProduct(product._id)">
+                  <span class="glyphicon glyphicon-pencil"></span> Edit
+                </button>
+                <button type="button" class="btn btn-xs btn-danger" (click)="deleteProduct(product._id)">
+                  <span class="glyphicon glyphicon-trash"></span> Delete
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <hr class="hr-line" />
+              <div class="col-xs-12 empty-line" ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="alert alert-success" *ngIf="saved">
+        Product saved successfully.
+      </div>
+      <div class="alert alert-danger" *ngIf="error">
+        Provide details for all mandatory fields.
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Product</div>
+        <div class="panel-body">
+          <div class="row">
+            <form>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4 text-right">
+                    <label for="title" >Title<sup>*</sup>:</label>
+                  </div>
+                  <div class="col-md-7">
+                    <input class="form-control input-sm ctrl-space" id="title" type="text" [(ngModel)]="selectedProduct.title" [ngModelOptions]="{standalone: true}"/>
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4 text-right">
+                    <label for="category" >Category<sup>*</sup>:</label>
+                  </div>
+                  <div class="col-md-7">
+                    <input class="form-control input-sm ctrl-space" id="category" type="text" [(ngModel)]="selectedProduct.category" [ngModelOptions]="{standalone: true}"/>
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-md-4 text-right">
+                    <label for="price">Price<sup>*</sup>:</label>
+                  </div>
+                  <div class="col-md-7">
+                    <input class="form-control input-sm ctrl-space" id="price" type="text" [(ngModel)]="selectedProduct.price" [ngModelOptions]="{standalone: true}"/>
+                  </div>
+                  <div class="col-md-1"> </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row">
+            <div class="col-md-7" ></div>
+            <div class="col-md-2">
+              <button type="button" class="btn btn-xs btn-primary" (click)="newProduct()">
+                New
+              </button>
+            </div>
+            <div class="col-md-3">
+              <button type="button" class="btn btn-xs btn-success" (click)="saveProduct()">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
